@@ -1,20 +1,16 @@
-//Make to seperatly generate FIFO, SFJ and RR executables
-
-CC = gcc
-
-CFLAGS = -Wall -g
+CC = g++
+CFLAGS = -Wall -Werror -g
 
 all: fifo sfj rr
 
-fifo: fifo.cpp pcb.h types.h
-	$(CC) $(CFLAGS) -o fifo fifo.c
+fifo: fifo.o
+	$(CC) $(CFLAGS) $? -o $@
 
-sfj: sfj.cpp pcb.h types.h
+sfj: sfj.cpp
+	$(CC) $(CFLAGS) $? -o $@
 
-	$(CC) $(CFLAGS) -o sfj sfj.c
-
-rr: rr.cpp pcb.h types.h
-	$(CC) $(CFLAGS) -o rr rr.c
+rr: rr.cpp
+	$(CC) $(CFLAGS) $? -o $@
 
 clean: 
-	rm -f fifo sfj rr
+	rm -f *.o fifo sfj rr *.o
