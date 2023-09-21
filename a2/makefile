@@ -1,16 +1,16 @@
 CC = g++
 CFLAGS = -Wall -Werror -g
 
-all: fifo sfj rr
+all: fifo sjf rr
 
-fifo: fifo.o
+fifo: fifo.cpp pcb.o
 	$(CC) $(CFLAGS) $? -o $@
 
-sfj: sfj.cpp
+sjf: sjf.cpp pcb.o
 	$(CC) $(CFLAGS) $? -o $@
 
-rr: rr.cpp
+rr: rr.cpp pcb.o
 	$(CC) $(CFLAGS) $? -o $@
 
 clean: 
-	rm -f *.o fifo sfj rr *.o
+	rm -f *.o fifo sjf rr *.o

@@ -22,6 +22,21 @@ class pcb {
     // what time was this process last on the cpu?
 
    public:
+    //Setters and getters
+    void setID(osp2023::id_type id);
+    const osp2023::id_type getID();
+
+    void setTotalTime(osp2023::time_type totalTime);
+    const osp2023::time_type getTotalTime();
+
+    void setTimeUsed(osp2023::time_type timeUsed);
+    const osp2023::time_type getTimeUsed();
+
+    void setTotalWaitTime(osp2023::time_type totalWaitTime);
+    const osp2023::time_type getTotalWaitTime();
+
+    bool operator<(const pcb& other);
+
     // max and min duration for a process in our system.
     static constexpr osp2023::time_type MAX_DURATION = 100;
     static constexpr osp2023::time_type MIN_DURATION = 10;
