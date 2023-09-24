@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -Werror -g
+CFLAGS = -Wall -g
 
 all: fifo sjf rr
 

@@ -27,6 +27,7 @@ int main(int argc, char *argv[]){
         std::cout << "Data file not valid or doesnt exist. \n Exiting Program." << std::endl;
         return EXIT_FAILURE;
     }
+    //dataFile.close();
 
     //Create processes
     std::vector<pcb> queue;
