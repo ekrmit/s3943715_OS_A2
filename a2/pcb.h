@@ -20,6 +20,7 @@ class pcb {
     // how much time has this process spent waiting for the cpu?
     osp2023::time_type total_wait_time;
     // what time was this process last on the cpu?
+    osp2023::time_type response_time;
 
    public:
     //Setters and getters
@@ -34,6 +35,9 @@ class pcb {
 
     void setTotalWaitTime(osp2023::time_type totalWaitTime);
     const osp2023::time_type getTotalWaitTime();
+
+    void setResponseTime(osp2023::time_type responseTime);
+    const osp2023::time_type getResponseTime();
 
     bool operator<(const pcb& other);
 

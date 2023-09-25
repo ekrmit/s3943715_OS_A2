@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 
     //Exit program if data file is not open in fstream.
     if(!dataFile){
-        std::cout << "Data file not valid or doesnt exist. \n Exiting Program." << std::endl;
+        std::cout << "Data file not valid or doesnt exist. \nExiting Program." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -61,11 +61,6 @@ int main(int argc, char *argv[]){
     //Sort the queue of ready proccess, by the shortest burst time first.
     std::sort(queue.begin(), queue.end(), compareByBurstTime);
 
-    // //FOR DEBUG, PRINT ALL PROCESSES IN ORDER
-    // for(int x = 0; x < int(queue.size()); x++){
-    //     std::cout << "Process ID:" << queue[x].getID() << ", Burst Time: " << queue[x].getTotalTime() << std::endl;
-    // }
-
     //TOTALS OF ALL TIMES
     time_type allProcessWaitTime = 0;
     time_type allProcessTurnAroundtime = 0;
@@ -88,11 +83,11 @@ int main(int argc, char *argv[]){
         //Calculate turn around time for this process.
         currTurnArTime = queue[x].getTotalWaitTime() + queue[x].getTotalTime();
 
-        // // FOR DEBUG Print current proccess information.
-        // std::cout << "Process " << queue[x].getID() << ": Burst Time = " << queue[x].getTotalTime()
-        //      << ", Turnaround Time = " << currTurnArTime
-        //      << ", Waiting Time = " << queue[x].getTotalWaitTime()
-        //      << ", Response Time = " << queue[x].getTotalWaitTime() << std::endl;
+        // Print process information, when complete.
+        std::cout << "Process: " << queue[x].getID() << ", Burst Time = " << queue[x].getTotalTime()
+             << ", Turnaround Time: " << currTurnArTime
+             << ", Waiting Time: " << queue[x].getTotalWaitTime()
+             << ", Response Time: " << queue[x].getTotalWaitTime() << std::endl;
         
         //Add to all totals.
         allProcessWaitTime += long(queue[x].getTotalWaitTime());
@@ -109,11 +104,12 @@ int main(int argc, char *argv[]){
 
     //Print final information.
     std::cout << std::endl;
-    std::cout << "Results:" << std::endl;
-    std::cout << "Number of Processes: " << numProcesses << std::endl;
-    std::cout << "Average Waiting Time: " << waitAverage << std::endl;
-    std::cout << "Average Turnaround Time: " << turnAroundAverage << std::endl;
-    std::cout << "Average Response Time: " << responseAverage << std::endl;
+    std::cout << "\033[1;32m" << "Shortest-Job-First Scheduling Results:" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" <<"Number of Processes: " << numProcesses << "\033[0m" << std::endl;
+    std::cout << "\033[32m" << "Average Waiting Time: " << waitAverage << "ms" << std::endl;
+    std::cout << "Average Response Time: " << responseAverage << "ms" << std::endl;
+    std::cout << "Average Turn-Around Time: " << turnAroundAverage << "ms" << "\033[0m" << std::endl;
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }

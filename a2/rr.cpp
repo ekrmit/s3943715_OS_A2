@@ -10,12 +10,6 @@
 
 using namespace osp2023;
 
-bool isNumber (std::string line){
-    if (isdigit(atoi(line.c_str())))
-        return true;
-    return false;
-}
-
 int main(int argc, char *argv[]){
     
     //check number of arguments. (HAS TO BE 2)
@@ -25,7 +19,7 @@ int main(int argc, char *argv[]){
     }
 
     //Open datafile in a fsteam
-    std::string data_file_name = argv[1];
+    std::string data_file_name = argv[2];
     std::fstream dataFile;
     dataFile.open(data_file_name);
 
@@ -37,11 +31,6 @@ int main(int argc, char *argv[]){
 
     //UNCOMMENT WHEN LOADER IMPLEMENTED
     //dataFile.close();
-
-    if(!isNumber(argv[1])){
-        std::cout << "The input quantumn is not a valid number. \n Exiting Program." << std::endl;
-        return EXIT_FAILURE;
-    }
 
     //Create the qunatum from input arg.
     time_type quantum = std::stoi(argv[1]);
@@ -63,6 +52,9 @@ int main(int argc, char *argv[]){
         pcb process;
         process.setID(pID);
         process.setTotalTime(burstTime);
+        process.setTimeUsed(0);
+        process.setTotalWaitTime(0);
+        process.setResponseTime(-1);
         readyQueue.push_back(process);
     }
 
@@ -76,49 +68,44 @@ int main(int argc, char *argv[]){
     //All used up time.
     time_type currentTime = 0;
 
+    //Pre defined variables, for calculation in the loop.
+    time_type timeSlice = 0;
+    time_type remainingTime = 0;
+
     //Go through the readyQueue of processes, satrting with first in.
     while(!readyQueue.empty()){
         pcb currentProcess = readyQueue.front();
         readyQueue.erase(readyQueue.begin());
 
         //Add to total response time if this is the first signal for process.
-        if(currentProcess.getTimeUsed() == 0){
+        if(currentProcess.getResponseTime() == -1){
+            currentProcess.setResponseTime(currentTime);
             allProcessResponseTime += currentTime;
         }
 
         //Determine the time slice of the process, then add to process' total used time.
-        time_type timeSlice = std::min(quantum, (currentProcess.getTotalTime() - currentProcess.getTimeUsed()) );
+        remainingTime = currentProcess.getTotalTime() - currentProcess.getTimeUsed();
+        timeSlice = std::min(quantum, remainingTime);
         currentProcess.setTimeUsed(currentProcess.getTimeUsed() + timeSlice);
-
-        //Calcuate the wait time for this cycle
-        time_type currUsedTime = currentTime - currentProcess.getTotalWaitTime();
-        currentProcess.setTotalWaitTime(currUsedTime);
 
         //Add time slice to total time used.
         currentTime += timeSlice;
-
-        //FOR DEBUGGING!!!, REMOVE ME LATER!!!
-        std::cout << "CURRENT PROCESS, ID: " << currentProcess.getID() << ", BT: " << currentProcess.getTimeUsed() << std::endl;
-        std::cout << "Time slice: " << timeSlice << ", Cycle wait time: " << currUsedTime 
-                  << ", Curr wait total: " << currentProcess.getTotalWaitTime() << std::endl;
-        std::cout << std::endl;
         
         //Check if process has finished execution.
         if(currentProcess.getTimeUsed() >= currentProcess.getTotalTime()){
-            
-            //Add this finished process' total wait time to all process total.
-            allProcessWaitTime += currentProcess.getTotalWaitTime();
 
             //Calculate and add this process' TA time to total
-            time_type TA_time = currentProcess.getTotalTime() + currentProcess.getTotalWaitTime();
+            time_type TA_time = currentTime;
+            time_type wait_time = TA_time - currentProcess.getTimeUsed();
+            currentProcess.setTotalWaitTime(wait_time);
             allProcessTurnAroundtime += TA_time;
+            allProcessWaitTime += wait_time;
 
-            //FOR DEBUGGING!! REMOVE ME LATER!
-            std::cout << "\033[1;31m" << "PROCESS COMPLETE. ID: " << currentProcess.getID() 
-                                                      << ", BT: " << currentProcess.getTotalTime() << std::endl;
-            std::cout << "Process wait time: " << currentProcess.getTotalWaitTime() << std::endl;
-            std::cout << "Process TA time: " << TA_time << "\033[1;0m" << std::endl;
-
+            
+            std::cout << "Process ID: " << currentProcess.getID() << ", Burst Time: " << currentProcess.getTotalTime()
+                      << ", Waiting time: " << currentProcess.getTotalWaitTime()
+                      << ", Response Time: " << currentProcess.getResponseTime()
+                      << ", Turn-around time: " << TA_time << std::endl;
         }
 
         else{
@@ -134,11 +121,13 @@ int main(int argc, char *argv[]){
     time_type responseAverage = allProcessResponseTime / numProcesses;
 
     std::cout << std::endl;
-    std::cout << "Results:" << std::endl;
-    std::cout << "Number of Processes: " << numProcesses << std::endl;
-    std::cout << "Average Waiting Time: " << waitAverage << std::endl;
-    std::cout << "Average Turnaround Time: " << turnAroundAverage << std::endl;
-    std::cout << "Average Response Time: " << responseAverage << std::endl;
+    std::cout << "\033[1;32m" << "Round Robin Scheduling Results:" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "Number of Processes: " << numProcesses << std::endl;
+    std::cout << "Quantum Size: " << quantum << "\033[0m" <<std::endl;
+    std::cout << "\033[32m" << "Average Waiting Time: " << waitAverage << "ms" << std::endl;
+    std::cout << "Average Response Time: " << responseAverage << "ms" << std::endl;
+    std::cout << "Average Turnaround Time: " << turnAroundAverage << "ms" << "\033[0m" << std::endl;
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }

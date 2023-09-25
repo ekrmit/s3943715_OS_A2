@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -g
 
-all: fifo sjf rr
+all: clean fifo sjf rr
 
 fifo: fifo.cpp pcb.o
 	$(CC) $(CFLAGS) $? -o $@

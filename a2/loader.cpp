@@ -3,7 +3,7 @@
 using namespace osp2023;
 
 //Method: Give data file name, returns vector of created PCBs.
-std::vector<pcb> createPCBs(std::string dataFileName){
+static std::vector<pcb> createPCBs(std::string dataFileName){
     //Open datafile in a fsteam
     std::fstream dataFile;
     dataFile.open(dataFileName);

@@ -66,7 +66,8 @@ int main(int argc, char *argv[]){
 
         currTurnArTime = queue[x].getTotalWaitTime() + queue[x].getTotalTime();
 
-        std::cout << "Process " << queue[x].getID() << ": Burst Time = " << queue[x].getTotalTime()
+        //Print process information when complete
+        std::cout << "Process ID: " << queue[x].getID() << ", Burst Time = " << queue[x].getTotalTime()
              << ", Turnaround Time = " << currTurnArTime
              << ", Waiting Time = " << queue[x].getTotalWaitTime()
              << ", Response Time = " << queue[x].getTotalWaitTime() << std::endl;
@@ -74,7 +75,6 @@ int main(int argc, char *argv[]){
         allProcessWaitTime += long(queue[x].getTotalWaitTime());
         allProcessResponseTime +=long(queue[x].getTotalWaitTime());
         allProcessTurnAroundtime += (long(queue[x].getTotalWaitTime()) + long(queue[x].getTotalTime()));
-
     }
 
     //Calculate Averages for  
@@ -84,12 +84,12 @@ int main(int argc, char *argv[]){
     time_type responseAverage = allProcessResponseTime / long(queue.size());
 
     std::cout << std::endl;
-    std::cout << "Results:" << std::endl;
-    std::cout << "Number of Processes: " << numProcesses << std::endl;
-    std::cout << "Average Waiting Time: " << waitAverage << std::endl;
-    std::cout << "Average Turnaround Time: " << turnAroundAverage << std::endl;
-    std::cout << "Average Response Time: " << responseAverage << std::endl;
+    std::cout << "\033[1;32m" <<"First-in-First-out Scheduling Results:" << "\033[0m" << std::endl;
+    std::cout << "\033[34m" << "Number of Processes: " << numProcesses << "\033[0m" << std::endl;
+    std::cout << "\033[32m" << "Average Waiting Time: " << waitAverage << "ms" << std::endl;
+    std::cout << "Average Response Time: " << responseAverage << "ms" << std::endl;
+    std::cout << "Average Turnaround Time: " << turnAroundAverage << "ms" << "\033[0m" << std::endl;
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
-
 }

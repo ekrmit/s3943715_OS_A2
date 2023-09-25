@@ -32,4 +32,11 @@ void pcb::setTotalWaitTime(osp2023::time_type totalWaitTime){
     this->total_wait_time = totalWaitTime;
 }
 
+void pcb::setResponseTime(osp2023::time_type responseTime){
+    this->response_time = responseTime;
+}
+
+const osp2023::time_type pcb::getResponseTime(){
+    return response_time;
+}
 
